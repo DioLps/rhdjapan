@@ -1,0 +1,55 @@
+.productCard {
+  flex: 0 0 calc(19% - 1.25rem);
+
+  &__banner {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-origin: padding-box;
+    height: 400px;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    margin-bottom: 0.5rem;
+  }
+
+  &__metadata {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  &__category {
+    text-transform: capitalize;
+  }
+
+  &__rating {
+    text-transform: capitalize;
+  }
+
+  &__price {
+    float: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: 1920px) {
+    &__banner {
+      height: 300px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    flex: 0 0 100%;
+
+    &__banner {
+      background-size: cover;
+      height: 75vh;
+    }
+  }
+}
