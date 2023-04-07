@@ -7,6 +7,12 @@ export const getProductsList = createAsyncThunk(
   "products/getProductsList",
   async () => ProductService.getList()
 );
+
+export const getProductById = createAsyncThunk(
+  "products/getProductById",
+  async (id: number) => ProductService.getProductById(id)
+);
+
 export interface ProductModel {
   id: number;
   title: string;
@@ -20,15 +26,17 @@ export interface ProductModel {
 // Type for our state
 export interface ProductsState {
   productsList: Array<ProductModel>;
+  selectedProduct: ProductModel | null;
   isLoading: boolean;
-  errors: string | undefined;
+  errors: string | null;
 }
 
 // Initial state
 const initialState: ProductsState = {
   productsList: [],
+  selectedProduct: null,
   isLoading: false,
-  errors: undefined,
+  errors: null,
 };
 
 const hydrateAction = createAction(HYDRATE);
@@ -57,7 +65,7 @@ export const productsSlice = createSlice({
         return {
           ...state,
           isLoading: true,
-          errors: undefined,
+          errors: null,
         };
       })
       .addCase(getProductsList.fulfilled, (state, { payload }) => {
@@ -65,14 +73,38 @@ export const productsSlice = createSlice({
           ...state,
           productsList: payload,
           isLoading: false,
-          errors: undefined,
+          errors: null,
         };
       })
       .addCase(getProductsList.rejected, (state, action) => {
         return {
           ...state,
           isLoading: false,
-          errors: action.error.message,
+          errors: action.error.message || null,
+        };
+      })
+      .addCase(getProductById.pending, (state) => {
+        return {
+          ...state,
+          selectedProduct: null,
+          isLoading: true,
+          errors: null,
+        };
+      })
+      .addCase(getProductById.fulfilled, (state, { payload }) => {
+        return {
+          ...state,
+          selectedProduct: payload,
+          isLoading: false,
+          errors: null,
+        };
+      })
+      .addCase(getProductById.rejected, (state, action) => {
+        return {
+          ...state,
+          selectedProduct: null,
+          isLoading: false,
+          errors: action.error.message || null,
         };
       });
 

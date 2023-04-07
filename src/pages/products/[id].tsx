@@ -1,16 +1,81 @@
-import ProductService from '@/services/product.service'
-import { ProductModel } from '@/store/products.slice'
+import {
+  convert,
+  isLoadingPrice,
+  selectCurrencyLabel,
+  selectCurrencyValue,
+  setCurrencysLabelState,
+  setCurrencysValueState,
+} from '@/store/currency.slice'
+import { ProductModel, getProductById } from '@/store/products.slice'
+import { wrapper } from '@/store/store'
 
 import styles from '@/styles/ProductDetails.module.scss'
 
 import { GetServerSidePropsContext } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+function formatCurrency(symbol: string, value: number): string {
+  const hasPoint = value.toString().includes('.')
+  let decimalValue: string = value.toString()
+  if (!hasPoint) {
+    decimalValue += '.00'
+  }
+  switch (symbol) {
+    case 'EUR':
+      return '€ ' + decimalValue
+    case 'JPY':
+      return '¥ ' + decimalValue
+    case 'GBP':
+      return '£ ' + decimalValue
+    default:
+      return '$ ' + decimalValue
+  }
+}
 
 function ProductDetail({
   selectedProduct,
 }: {
   selectedProduct: ProductModel
 }): any {
+  const selectedCurrencyLabel = useSelector(selectCurrencyLabel)
+  const selectedCurrencyValue = useSelector(selectCurrencyValue)
+  const isLoadingCurrencyPrice = useSelector(isLoadingPrice)
+  const dispatch = useDispatch<any>()
+
+  useEffect(() => {
+    if (selectedCurrencyLabel === 'USD') {
+      dispatch(setCurrencysValueState(selectedProduct.price))
+    } else {
+      dispatch(
+        convert({
+          to: String(selectedCurrencyLabel),
+          from: 'USD',
+          amount: selectedProduct.price,
+        }),
+      )
+    }
+  }, [selectedProduct, dispatch, selectedCurrencyLabel])
+
+  function onChangeSelect(event: any) {
+    const newCurrencyLabel = event.target.value
+
+    if (newCurrencyLabel === 'USD') {
+      dispatch(setCurrencysValueState(selectedProduct.price))
+    } else {
+      dispatch(
+        convert({
+          to: newCurrencyLabel,
+          from: String(selectedCurrencyLabel),
+          amount: Number(selectedCurrencyValue),
+        }),
+      )
+    }
+    dispatch(setCurrencysLabelState(newCurrencyLabel))
+  }
+
   return (
     <>
       <Head>
@@ -41,10 +106,13 @@ function ProductDetail({
       </Head>
       <main className={styles.productDetails}>
         <section className={styles.productDetails__bannerContainer}>
-          <img
+          <Image
             className={styles.productDetails__banner}
             src={selectedProduct.image}
             alt={selectedProduct.title + 'banner'}
+            width={600}
+            height={900}
+            priority
           />
         </section>
         <section className={styles.productDetails__infoContainer}>
@@ -62,9 +130,45 @@ function ProductDetail({
           <p className={styles.productDetails__description}>
             {selectedProduct.description}
           </p>
-          <p className={styles.productDetails__price}>
-            {selectedProduct.price}
-          </p>
+          <div className={styles.productDetails__currencyContainer}>
+            <label
+              htmlFor="currencySelection"
+              className={styles.productDetails__currencyLabel}
+            >
+              {isLoadingCurrencyPrice
+                ? 'Calculating price...'
+                : 'Select your currency:'}
+            </label>
+            <select
+              id="currencySelection"
+              defaultValue={selectedCurrencyLabel}
+              onChange={onChangeSelect}
+              disabled={isLoadingCurrencyPrice}
+              className={styles.productDetails__currency}
+            >
+              <option value="USD">USD $</option>
+              <option value="JPY">JP ¥</option>
+              <option value="EUR">EUR €</option>
+              <option value="GBP">GBP £</option>
+            </select>
+          </div>
+          <div className={styles.productDetails__priceContainer}>
+            <button type="button" className={styles.productDetails__buy}>
+              Buy
+            </button>
+            {isLoadingCurrencyPrice ? (
+              <div className="la-ball-rotate la-dark la-sm">
+                <div></div>
+              </div>
+            ) : (
+              <p className={styles.productDetails__price}>
+                {formatCurrency(
+                  String(selectedCurrencyLabel),
+                  Number(selectedCurrencyValue),
+                )}
+              </p>
+            )}
+          </div>
         </section>
       </main>
     </>
@@ -73,12 +177,13 @@ function ProductDetail({
 
 export default ProductDetail
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<any>,
-) {
-  const id = context.params.id
-  const selectedProduct = await ProductService.getProductById(id)
-  return {
-    props: { selectedProduct },
-  }
-}
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context: GetServerSidePropsContext<any>) => {
+    const id = context.params.id
+    await store.dispatch(getProductById(id))
+    const { productsSlice } = store.getState()
+    return {
+      props: { selectedProduct: productsSlice.selectedProduct },
+    }
+  },
+)

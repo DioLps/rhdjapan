@@ -10,16 +10,18 @@
 
   &__banner {
     width: 100%;
+    height: auto;
   }
 
   &__infoContainer {
     flex: 0 0 50%;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
   }
 
   &__title {
     margin-top: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 3rem;
   }
 
   &__description {
@@ -47,10 +49,48 @@
     font-weight: bold;
   }
 
+  &__currencyContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__currencyLabel {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  &__currency {
+    padding: 0.5rem;
+  }
+
+  &__priceContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 1rem;
+  }
+
   &__price {
     font-weight: bold;
     text-align: right;
     font-size: 1.5rem;
+  }
+
+  &__buy {
+    padding: 0.4rem 1rem;
+    flex: 1;
+    font-weight: bold;
+    font-size: 1rem;
+    background-color: #2fe192;
+    color: white;
+    border: 1px solid #007642;
+    border-radius: 2px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   @media only screen and (max-width: 1140px) {

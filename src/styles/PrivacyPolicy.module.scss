@@ -1,0 +1,23 @@
+.privacyPolicy {
+  padding: 1.5rem 18rem;
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__body {
+    margin-bottom: 1rem;
+    text-align: justify;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    letter-spacing: 2px;
+  }
+
+  @media only screen and (max-width: 1140px) {
+    padding: 1rem 3rem;
+  }
+
+  @media only screen and (max-width: 768px) {
+    padding: 1rem;
+  }
+}

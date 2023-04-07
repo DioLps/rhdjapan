@@ -1,20 +1,13 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-
 import Head from 'next/head'
 
-import { getProductsList, selectAllProducts } from '@/store/products.slice'
+import { ProductsState, getProductsList } from '@/store/products.slice'
 import ProductCard from '@/components/ProductCard'
 
 import styles from '@/styles/Home.module.scss'
+import { wrapper } from '@/store/store'
 
-export default function Home() {
-  const products = useSelector(selectAllProducts) || []
-  const dispatch = useDispatch<any>()
-
-  useEffect(() => {
-    dispatch(getProductsList())
-  }, [])
+export default function Home({ productsList }: Partial<ProductsState>) {
+  const products = productsList || []
 
   return (
     <>
@@ -39,3 +32,13 @@ export default function Home() {
     </>
   )
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async () => {
+    await store.dispatch(getProductsList())
+    const { productsSlice } = store.getState()
+    return {
+      props: productsSlice,
+    }
+  },
+)

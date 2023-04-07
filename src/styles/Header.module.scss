@@ -1,4 +1,46 @@
 .header {
   padding: 1rem;
   border-bottom: 1px solid grey;
+  display: flex;
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    column-gap: 0.8rem;
+  }
+
+  &__link {
+    text-transform: uppercase;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    &__logo {
+      width: 70px;
+    }
+
+    &__links {
+      justify-content: flex-end;
+      font-size: 0.8rem;
+      column-gap: 0.4rem;
+    }
+
+    &__link {
+      text-transform: none;
+    }
+
+    &__onlyDeskTop {
+      display: none;
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    &__onlyDeskTop {
+      display: block;
+    }
+  }
 }
