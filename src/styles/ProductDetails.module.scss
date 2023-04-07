@@ -63,6 +63,7 @@
 
   &__currency {
     padding: 0.5rem;
+    font-size: 1.2rem;
   }
 
   &__priceContainer {
@@ -79,13 +80,17 @@
   }
 
   &__buy {
-    padding: 0.4rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.5rem;
     flex: 1;
+    padding: 0.4rem 1rem;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.2rem;
     background-color: #2fe192;
     color: white;
-    border: 1px solid #007642;
+    border:  none;
     border-radius: 2px;
 
     &:hover {
@@ -99,5 +104,10 @@
 
   @media only screen and (max-width: 768px) {
     padding: 1rem;
+
+    &__bannerContainer,
+    &__infoContainer {
+      flex: 0 0 100%;
+    }
   }
 }

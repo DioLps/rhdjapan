@@ -3,6 +3,10 @@
   border-bottom: 1px solid grey;
   display: flex;
 
+  &__logo {
+    height: auto;
+  }
+
   &__links {
     display: flex;
     justify-content: center;
@@ -31,6 +35,10 @@
 
     &__link {
       text-transform: none;
+      font-size: 1.3rem;
+      border-bottom: 1px solid grey;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
     }
 
     &__onlyDeskTop {

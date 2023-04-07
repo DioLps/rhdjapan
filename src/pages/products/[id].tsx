@@ -154,6 +154,13 @@ function ProductDetail({
           </div>
           <div className={styles.productDetails__priceContainer}>
             <button type="button" className={styles.productDetails__buy}>
+              <Image
+                src={'/cart.svg'}
+                alt="Cart icon"
+                width={25}
+                height={25}
+                className={styles.productDetails__cartIcon}
+              />
               Buy
             </button>
             {isLoadingCurrencyPrice ? (
