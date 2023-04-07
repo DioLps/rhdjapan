@@ -15,12 +15,6 @@ function ProductCard({
         style={{ backgroundImage: 'url(' + product.image + ')' }}
       ></div>
       <h3 className={style.productCard__title}>{product.title}</h3>
-      <div className={style.productCard__metadata}>
-        <p className={style.productCard__category}>{product.category}</p>
-        <small className={style.productCard__rating}>
-          Rating {product.rating.rate} of {product.rating.count} reviews
-        </small>
-      </div>
       <p className={style.productCard__price}>US$ {product.price}</p>
     </a>
   )

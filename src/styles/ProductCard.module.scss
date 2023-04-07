@@ -12,26 +12,14 @@
 
   &__title {
     margin-bottom: 0.5rem;
-  }
-
-  &__metadata {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-
-  &__category {
-    text-transform: capitalize;
-  }
-
-  &__rating {
-    text-transform: capitalize;
+    text-align: justify;
+    line-height: 1.2;
+    letter-spacing: 1px;
   }
 
   &__price {
     float: right;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1rem;
   }
 
   &:hover {
